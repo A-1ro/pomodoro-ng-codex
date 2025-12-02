@@ -1,0 +1,14 @@
+<mat-toolbar color="primary" class="app-toolbar">
+  <div class="brand">
+    <span class="icon">⏳</span>
+    <span>{{ title }}</span>
+  </div>
+  <span class="spacer"></span>
+  <button mat-icon-button disabled aria-label="Menu">
+    <span class="icon">⋯</span>
+  </button>
+</mat-toolbar>
+
+<main class="shell">
+  <router-outlet></router-outlet>
+</main>

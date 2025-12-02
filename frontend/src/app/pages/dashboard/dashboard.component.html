@@ -1,0 +1,37 @@
+<section class="grid">
+  <mat-card appearance="outlined" class="panel">
+    <header>
+      <div>
+        <p class="eyebrow">今日のタスク</p>
+        <h2>ポモドーロリスト</h2>
+      </div>
+    </header>
+
+    <app-task-form (createTask)="addTask($event)"></app-task-form>
+    <mat-divider></mat-divider>
+
+    <ng-container *ngIf="vm$ | async as vm">
+      <app-task-list
+        [tasks]="vm.tasks"
+        [activeTaskId]="vm.activeTask?.id ?? null"
+        [isRunning]="vm.isRunning"
+        (start)="start($event)"
+        (pause)="pause()"
+        (complete)="complete($event)"
+      ></app-task-list>
+    </ng-container>
+  </mat-card>
+
+  <ng-container *ngIf="vm$ | async as vm">
+    <app-pomodoro-timer
+      class="panel"
+      [task]="vm.activeTask"
+      [isRunning]="vm.isRunning"
+      [remainingSeconds]="vm.remainingSeconds"
+      [progress]="vm.progress"
+      (pauseRequested)="pause()"
+      (resumeRequested)="resume(vm.activeTask?.id ?? null)"
+      (completeRequested)="complete(vm.activeTask?.id ?? undefined)"
+    ></app-pomodoro-timer>
+  </ng-container>
+</section>

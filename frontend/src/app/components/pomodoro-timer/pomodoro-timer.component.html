@@ -1,0 +1,44 @@
+<mat-card class="timer-card" appearance="outlined">
+  <div class="header">
+    <div>
+      <p class="eyebrow">現在のタスク</p>
+      <h2 class="title">{{ task?.name ?? '未選択' }}</h2>
+    </div>
+    <mat-chip-set>
+      <mat-chip color="accent">{{ phaseLabel }}</mat-chip>
+      <mat-chip appearance="outlined" color="primary">サイクル {{ task ? task.timer.cycle : 1 }}</mat-chip>
+    </mat-chip-set>
+  </div>
+
+  <div class="progress-block" *ngIf="task; else idleState">
+    <div class="time">
+      <div class="left">
+        <p>残り時間</p>
+        <h1>{{ formatTime(remainingSeconds) }}</h1>
+      </div>
+      <div class="phase">
+        <span class="icon">⏱️</span>
+        <span>{{ isRunning ? '計測中' : '一時停止中' }}</span>
+      </div>
+    </div>
+
+    <mat-progress-bar mode="determinate" [value]="progress"></mat-progress-bar>
+
+    <div class="actions">
+      <button mat-stroked-button color="primary" *ngIf="isRunning" (click)="pauseRequested.emit()">
+        一時停止
+      </button>
+      <button mat-flat-button color="primary" *ngIf="!isRunning" (click)="resumeRequested.emit()">
+        再開
+      </button>
+      <button mat-button color="warn" (click)="completeRequested.emit()">完了</button>
+    </div>
+  </div>
+</mat-card>
+
+<ng-template #idleState>
+  <div class="idle">
+    <span class="icon">✅</span>
+    <p>タスクを開始するとタイマーが動き始めます。</p>
+  </div>
+</ng-template>

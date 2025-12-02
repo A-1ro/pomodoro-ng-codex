@@ -1,0 +1,9 @@
+<form class="task-form" (ngSubmit)="submit()" [formGroup]="taskForm">
+  <mat-form-field appearance="outline" class="task-input">
+    <mat-label>タスク名</mat-label>
+    <input matInput placeholder="例: 仕様書を書く" formControlName="name" />
+    <mat-hint>80文字まで</mat-hint>
+  </mat-form-field>
+
+  <button mat-flat-button color="primary" type="submit" [disabled]="taskForm.invalid">タスクを追加</button>
+</form>

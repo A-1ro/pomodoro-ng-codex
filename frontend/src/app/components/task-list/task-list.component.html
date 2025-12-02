@@ -1,0 +1,54 @@
+<mat-nav-list>
+  <ng-container *ngIf="tasks?.length; else emptyState">
+    <mat-list-item *ngFor="let task of tasks" [ngClass]="{ active: task.id === activeTaskId }">
+      <div class="task-body">
+        <div class="task-title">
+          <span class="name">{{ task.name }}</span>
+          <mat-chip-set>
+            <mat-chip [color]="task.status === 'completed' ? 'primary' : 'accent'">
+              {{ statusLabel(task.status) }}
+            </mat-chip>
+            <mat-chip appearance="outlined" color="primary">サイクル {{ task.timer.cycle }}</mat-chip>
+            <mat-chip appearance="outlined">{{ formatTimer(task.timer.elapsedSeconds) }}</mat-chip>
+          </mat-chip-set>
+        </div>
+
+        <div class="actions">
+          <button
+            mat-stroked-button
+            color="primary"
+            *ngIf="task.status !== 'completed' && task.id !== activeTaskId"
+            (click)="start.emit(task.id)"
+          >
+            {{ task.status === 'paused' ? '再開' : '開始' }}
+          </button>
+
+          <button
+            mat-stroked-button
+            color="primary"
+            *ngIf="task.id === activeTaskId && isRunning"
+            (click)="pause.emit()"
+          >
+            一時停止
+          </button>
+
+          <button
+            mat-flat-button
+            color="accent"
+            [disabled]="task.status === 'completed'"
+            (click)="complete.emit(task.id)"
+          >
+            完了
+          </button>
+        </div>
+      </div>
+    </mat-list-item>
+  </ng-container>
+</mat-nav-list>
+
+<ng-template #emptyState>
+  <div class="empty">
+    <span class="icon">⏳</span>
+    <p>まだタスクがありません。左上のフォームから追加してください。</p>
+  </div>
+</ng-template>

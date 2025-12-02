@@ -1,0 +1,3 @@
+ブランチを切った上で、以下のIssueの対応を行なってください
+
+https://github.com/A-1ro/pomodoro-ng-codex/issues/1

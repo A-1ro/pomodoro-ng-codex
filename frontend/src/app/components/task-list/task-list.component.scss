@@ -1,0 +1,73 @@
+.task-body {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.task-title {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.name {
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.empty {
+  padding: 24px;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.6);
+  display: grid;
+  gap: 4px;
+  place-items: center;
+}
+
+.icon {
+  font-size: 20px;
+}
+
+mat-list-item.active {
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 12px;
+}
+
+:host ::ng-deep .mat-mdc-list-item {
+  height: auto;
+  align-items: flex-start;
+  padding-top: 14px;
+  padding-bottom: 14px;
+  min-height: 72px;
+}
+
+:host ::ng-deep .mat-mdc-list-item.mdc-list-item--with-one-line,
+:host ::ng-deep .mat-mdc-list-item.mdc-list-item--with-two-lines,
+:host ::ng-deep .mat-mdc-list-item.mdc-list-item--with-three-lines {
+  height: auto;
+  min-height: 72px;
+}
+
+:host ::ng-deep .mat-mdc-list-item .mdc-list-item__content {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+@media (max-width: 720px) {
+  .task-body {
+    grid-template-columns: 1fr;
+  }
+
+  .actions {
+    justify-content: flex-start;
+  }
+}
