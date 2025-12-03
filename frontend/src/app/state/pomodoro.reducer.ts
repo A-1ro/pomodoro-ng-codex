@@ -93,6 +93,18 @@ const updateStatuses = (tasks: Task[], activeTaskId: string | null): Task[] =>
 
 export const pomodoroReducer = createReducer(
   initialState,
+  on(PomodoroActions.loadTasksSuccess, (state, { tasks }): PomodoroState => ({
+    ...state,
+    tasks,
+  })),
+  on(PomodoroActions.createTaskSuccess, (state, { task }): PomodoroState => ({
+    ...state,
+    tasks: [...state.tasks, task],
+  })),
+  on(PomodoroActions.updateTaskSuccess, (state, { task }): PomodoroState => ({
+    ...state,
+    tasks: state.tasks.map((t) => (t.id === task.id ? task : t)),
+  })),
   on(PomodoroActions.addTask, (state, { name }): PomodoroState => {
     const trimmed = name.trim();
     if (!trimmed) {

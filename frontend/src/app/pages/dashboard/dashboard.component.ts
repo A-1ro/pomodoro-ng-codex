@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
@@ -34,7 +34,7 @@ interface DashboardViewModel {
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   readonly vm$ = combineLatest({
     tasks: this.store.select(PomodoroSelectors.selectTasks),
     activeTask: this.store.select(PomodoroSelectors.selectActiveTask),
@@ -46,6 +46,10 @@ export class DashboardComponent {
   readonly activeTaskId$ = this.store.select(PomodoroSelectors.selectActiveTaskId);
 
   constructor(private readonly store: Store, private readonly timer: PomodoroTimerService) {}
+
+  ngOnInit(): void {
+    this.store.dispatch(PomodoroActions.loadTasks());
+  }
 
   addTask(name: string): void {
     this.store.dispatch(PomodoroActions.addTask({ name }));
