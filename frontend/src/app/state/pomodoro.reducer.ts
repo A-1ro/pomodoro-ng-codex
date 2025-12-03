@@ -26,15 +26,6 @@ const createTimer = (): TimerInfo => ({
   durationSeconds: FOCUS_SECONDS,
 });
 
-const randomId = () => `task-${Date.now()}-${Math.random().toString(16).slice(2, 8)}`;
-
-const createTask = (name: string): Task => ({
-  id: randomId(),
-  name,
-  status: 'pending',
-  timer: createTimer(),
-});
-
 const phaseDuration = (phase: PomodoroPhase, cycle: number) => {
   switch (phase) {
     case 'focus':
@@ -105,17 +96,7 @@ export const pomodoroReducer = createReducer(
     ...state,
     tasks: state.tasks.map((t) => (t.id === task.id ? task : t)),
   })),
-  on(PomodoroActions.addTask, (state, { name }): PomodoroState => {
-    const trimmed = name.trim();
-    if (!trimmed) {
-      return state;
-    }
 
-    return {
-      ...state,
-      tasks: [...state.tasks, createTask(trimmed)],
-    };
-  }),
   on(PomodoroActions.startTask, (state, { taskId }): PomodoroState => {
     const tasks: Task[] = updateStatuses(state.tasks, taskId).map((task): Task => {
       if (task.id !== taskId) {
