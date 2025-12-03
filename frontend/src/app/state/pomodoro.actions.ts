@@ -1,6 +1,8 @@
 import { createAction, props } from '@ngrx/store';
 import { Task } from '../models/task.model';
 
+export const noOp = createAction('[Pomodoro] No-Op');
+
 export const addTask = createAction('[Pomodoro] Add Task', props<{ name: string }>());
 
 export const loadTasks = createAction('[Pomodoro] Load Tasks');

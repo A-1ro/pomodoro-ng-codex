@@ -7,6 +7,8 @@ import { TaskApiService } from '../services/task-api.service';
 import * as PomodoroActions from './pomodoro.actions';
 import * as PomodoroSelectors from './pomodoro.selectors';
 
+const SYNC_INTERVAL_SECONDS = 5;
+
 @Injectable()
 export class PomodoroEffects {
   loadTasks$ = createEffect(() =>
@@ -44,7 +46,7 @@ export class PomodoroEffects {
       }),
       switchMap((task) => {
         if (!task) {
-          return of({ type: '[Pomodoro] No-Op' });
+          return of(PomodoroActions.noOp());
         }
         return this.taskApiService.createTask(task).pipe(
           map((createdTask) => PomodoroActions.createTaskSuccess({ task: createdTask })),
@@ -61,7 +63,7 @@ export class PomodoroEffects {
       switchMap(([{ taskId }, tasks]) => {
         const task = tasks.find((t) => t.id === taskId);
         if (!task) {
-          return of({ type: '[Pomodoro] No-Op' });
+          return of(PomodoroActions.noOp());
         }
         const updatedTask = {
           ...task,
@@ -84,11 +86,11 @@ export class PomodoroEffects {
       ),
       switchMap(([, activeTaskId, tasks]) => {
         if (!activeTaskId) {
-          return of({ type: '[Pomodoro] No-Op' });
+          return of(PomodoroActions.noOp());
         }
         const task = tasks.find((t) => t.id === activeTaskId);
         if (!task) {
-          return of({ type: '[Pomodoro] No-Op' });
+          return of(PomodoroActions.noOp());
         }
         const updatedTask = {
           ...task,
@@ -109,7 +111,7 @@ export class PomodoroEffects {
       switchMap(([{ taskId }, tasks]) => {
         const task = tasks.find((t) => t.id === taskId);
         if (!task) {
-          return of({ type: '[Pomodoro] No-Op' });
+          return of(PomodoroActions.noOp());
         }
         const updatedTask = {
           ...task,
@@ -132,11 +134,11 @@ export class PomodoroEffects {
       ),
       switchMap(([, isRunning, activeTask]) => {
         if (!isRunning || !activeTask) {
-          return of({ type: '[Pomodoro] No-Op' });
+          return of(PomodoroActions.noOp());
         }
-        // Only update every 5 seconds to reduce API calls
-        if (activeTask.timer.elapsedSeconds % 5 !== 0) {
-          return of({ type: '[Pomodoro] No-Op' });
+        // Only update every SYNC_INTERVAL_SECONDS to reduce API calls
+        if (activeTask.timer.elapsedSeconds % SYNC_INTERVAL_SECONDS !== 0) {
+          return of(PomodoroActions.noOp());
         }
         return this.taskApiService.updateTask(activeTask).pipe(
           map((updated) => PomodoroActions.updateTaskSuccess({ task: updated })),
